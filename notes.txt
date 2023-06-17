@@ -1,0 +1,32 @@
+create user role
+
+
+Configure user:
+aws configure
+sam init - create sam project
+sam build
+sam build --use-container
+
+
+run locally :
+ -> config : 
+ sudo groupadd docker
+ sudo usermod -aG docker $USER
+ newgrp docker
+ 
+ -> run
+ sam build --use-container
+ sam local invoke
+
+ -> deploy
+    -> package
+    while creating package make sure this param in samconfig 
+        resolve_s3 = false
+        stack_name = "SamWithDocker"
+        s3_bucket = "samdockerapp"   - create s3 bucket
+        s3_prefix = "SamWithDocker"
+        region = "ap-south-1"   - same as bucket
+
+sam package --template-file template.yml --output-template-file samtemplate.yml --s3-bucket    samdockerapp
+ 
+ sam deploy --template-file sam-template.yml --stack-name my-sam-stack  --capabilities CAPABILITY_IAM
